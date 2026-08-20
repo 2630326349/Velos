@@ -60,6 +60,13 @@ jobs:
       - name: Build debug APK (unsigned)
         run: ./gradlew --no-daemon clean assembleDebug
 
+      # 👇 新增：将APK上传到Actions工件，方便直接下载
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Velos-app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+
       - name: Generate release metadata
         id: meta
         run: |
@@ -80,6 +87,6 @@ jobs:
           generate_release_notes: true
           prerelease: true
           files: |
-            app/build/outputs/apk/debug/*.apk   # 路径改为 debug
+            app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
